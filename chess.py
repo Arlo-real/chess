@@ -1,9 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
+from math import floor
 
 # main window
 root = tk.Tk()
-root.geometry("660x640")
+root.geometry("800x800")
 root.title('Chess')
 
 Buttons=[]
@@ -18,8 +19,8 @@ for i in range(64):
 
 
 for i in range(64):
-    button = ttk.Button(root, text="Login")
-    button.grid(column=(i/8)__floor__, row=i%8)
+    button = ttk.Button(root, text="")
+    button.grid(column=floor((i/8)), row=i%8)
 
 
 root.mainloop()
