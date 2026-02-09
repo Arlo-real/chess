@@ -126,6 +126,7 @@ class chess:
             self.updatebuttons()
             self.won_loose_tie()
         print("Selected piece:", self.selectedpice)
+        
 
 
 
