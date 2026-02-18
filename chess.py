@@ -113,7 +113,7 @@ class chess:
     def won_loose_tie(self):
         pass
     
-    def movepiece(self, origin, destination):
+    def movepiece(self, origin, destination, simulation=False):
         if self.enpassantenabled:
             if self.getpiece(origin) in ["♙", "♟"] and self.getpiece(destination) == "ep":
                 captured_pawn_index = self.getindex(self.column(destination), self.row(origin))
@@ -182,10 +182,11 @@ class chess:
         if self.enpassantenabled and self.getpiece(destination) in ["♙", "♟"] and abs(self.row(destination)-self.row(origin))==2:
             self.list_of_pieces[self.getindex(self.column(destination), (self.row(destination)+self.row(origin))//2)] = "ep"
             self.updatecolor(self.getindex(self.column(destination), (self.row(destination)+self.row(origin))//2), "green")
-        if self.row(destination)==1 and self.getpiece(destination)=="♟":
-            self.promote_pawn(destination)
-        if self.row(destination)==8 and self.getpiece(destination)=="♙":
-            self.promote_pawn(destination)
+        if not simulation:
+            if self.row(destination)==8 and self.getpiece(destination)=="♟":
+                self.promote_pawn(destination)
+            if self.row(destination)==1 and self.getpiece(destination)=="♙":
+                self.promote_pawn(destination)
     
     def promote_pawn(self, index):
         aux=tk.Tk()
@@ -202,6 +203,7 @@ class chess:
     def promote_and_close(self, index, new_piece, window):
         self.list_of_pieces[index] = new_piece
         window.destroy()
+        self.updatebuttons()
 
 
 
@@ -354,7 +356,7 @@ class chess:
         original_pieces = self.list_of_pieces.copy()
         original_colors = self.list_of_colors.copy()
 
-        self.movepiece(origin, destination)
+        self.movepiece(origin, destination, simulation=True)
 
         in_check = self.ischeck(original_player)
 
