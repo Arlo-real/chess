@@ -10,6 +10,8 @@ class chess:
     def __init__(self):
         self.enpassantenabled = True
         self.kastlingenabled = True
+        self.turnboardenabled = True
+
         if self.kastlingenabled:
             self.whitecastlingkingside = True
             self.whitecastlingqueenside = True
@@ -81,13 +83,14 @@ class chess:
             self.buttonlist[i]["bg"] = self.list_of_cases[i]
             self.buttonlist[i]["activebackground"] = self.list_of_cases[i]
             self.buttonlist[i]["fg"] = self.list_of_colors[i]
-        if self.player=="white":
-            for i in range(64):
-                self.framelist[i].grid(column=(i%8)+1, row=floor(i/8)+2)
-        
-        else:
-            for i in range(64):
-                self.framelist[i].grid(column=((63-i)%8)+1, row=floor((63-i)/8)+2)
+        if self.turnboardenabled:
+            if self.player=="white":
+                for i in range(64):
+                    self.framelist[i].grid(column=(i%8)+1, row=floor(i/8)+2)
+            
+            else:
+                for i in range(64):
+                    self.framelist[i].grid(column=((63-i)%8)+1, row=floor((63-i)/8)+2)
 
 
 
