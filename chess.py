@@ -94,12 +94,16 @@ class chess:
         self.list_of_pieces[destination] = self.list_of_pieces[origin]
         self.list_of_pieces[origin] = ""
 
-    def legalmove(self, origin=None, destination=None):
+    def legalmove(self, origin, destination):
+
         if origin == destination:
             return False 
         if self.getpiece(destination) in ["♟", "♜", "♞", "♝", "♛", "♚"] and self.player=="black":
             return False
         if self.getpiece(destination) in ["♙", "♖", "♘", "♗", "♕", "♔"] and self.player=="white":
+            return False
+        
+        if not(origin==None or destination==None) and self.simulate_move(origin, destination):
             return False
         
         if self.getpiece(origin) == "♙" and self.getpiece(destination) == "" and self.column(destination)==self.column(origin) and (self.row(destination)==self.row(origin)-1 or (self.row(origin)==7 and self.row(destination)==5 and self.getpiece(self.getindex(self.column(origin), 6))=="")):
@@ -175,17 +179,40 @@ class chess:
             return True
         
         return False
-    
+
+
+    def simulate_move(self, origin, destination):
+        original_piece_destination = self.getpiece(destination)
+        self.movepiece(origin, destination)
+        is_check = self.ischeck(self.player)
+        self.movepiece(destination, origin)  # Move back to original position
+        self.list_of_pieces[destination] = original_piece_destination  # Restore captured piece if any
+        return is_check
+
+
+
     def ischeck(self, player):
         king_position=None
         for i in range(64):
             if self.getpiece(i) == ("♔" if player=="white" else "♚"):
                 king_position = i
                 break
+        if king_position is None:
+            raise LookupError("The king is gone, how did you even do that?")
         for i in range(64):
             if self.legalmove(i, king_position):
                 return True
         return False
+    def ischeckmate(self, player):
+        if not self.ischeck(player):
+            return False
+        for i in range(64):
+            if self.getpiece(i) in (["♙", "♖", "♘", "♗", "♕", "♔"] if player=="white" else ["♟", "♜", "♞", "♝", "♛", "♚"]):
+                for j in range(64):
+                    if self.legalmove(i, j) and not self.simulate_move(i, j):
+                        return False
+        return True
+
 
     def highlightlegalmoves(self, origin):
         for i in range(64):
@@ -232,8 +259,10 @@ class chess:
             if self.player=="white": self.player="black"
             elif self.player=="black": self.player="white"
             self.playerinfo="Player "+self.player+" on turn."
+            if self.ischeckmate(self.player):
+                self.playerinfo="Player "+("white" if self.player=="black" else "black")+" wins by checkmate!"
             self.updatebuttons()
-            self.won_loose_tie()
+            
         print("Selected piece:", self.previouspiece)
         
 
