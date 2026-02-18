@@ -43,19 +43,19 @@ class chess:
 
         self.buttonlist = []
         self.framelist = []
-        button_size = 60  # pixels
+        self.button_size = 60  # pixels
 
         for i in range(64):
-            btn_frame = tk.Frame(self.frame, width=button_size, height=button_size)
-            btn_frame.grid(column=(i%8)+1, row=floor(i/8)+2)
-            btn_frame.grid_propagate(False) 
-            btn_frame.columnconfigure(0, weight=1)
-            btn_frame.rowconfigure(0, weight=1)
-            btn = tk.Button(btn_frame, bd=0, font=font, command=lambda i=i: self.buttonclicked(i))
+            self.btn_frame = tk.Frame(self.frame, width=self.button_size, height=self.button_size)
+            self.btn_frame.grid(column=(i%8)+1, row=floor(i/8)+2)
+            self.btn_frame.grid_propagate(False) 
+            self.btn_frame.columnconfigure(0, weight=1)
+            self.btn_frame.rowconfigure(0, weight=1)
+            btn = tk.Button(self.btn_frame, bd=0, font=font, command=lambda i=i: self.buttonclicked(i))
             btn.grid(sticky="wens") #thanks stackoverflow
             
             self.buttonlist.append(btn)
-            self.framelist.append(btn_frame)
+            self.framelist.append(self.btn_frame)
         for i in range (8):
             for j in range (8):
                 if (i+j)%2==0: self.list_of_cases.append("#b9a134")
@@ -72,6 +72,7 @@ class chess:
 
     def updatebuttons(self):
         self.playerinfolabel["text"] = self.playerinfo
+        
         for i in range(64):
             piece = self.list_of_pieces[i]
             # Hide internal en passant markers from the UI
@@ -80,6 +81,15 @@ class chess:
             self.buttonlist[i]["bg"] = self.list_of_cases[i]
             self.buttonlist[i]["activebackground"] = self.list_of_cases[i]
             self.buttonlist[i]["fg"] = self.list_of_colors[i]
+        if self.player=="white":
+            for i in range(64):
+                self.framelist[i].grid(column=(i%8)+1, row=floor(i/8)+2)
+        
+        else:
+            for i in range(64):
+                self.framelist[i].grid(column=((63-i)%8)+1, row=floor((63-i)/8)+2)
+
+
 
     def updatecolor(self, buttonnumber, newcolor):
         print("Updating color of button", buttonnumber, "to", newcolor)
@@ -172,6 +182,28 @@ class chess:
         if self.enpassantenabled and self.getpiece(destination) in ["♙", "♟"] and abs(self.row(destination)-self.row(origin))==2:
             self.list_of_pieces[self.getindex(self.column(destination), (self.row(destination)+self.row(origin))//2)] = "ep"
             self.updatecolor(self.getindex(self.column(destination), (self.row(destination)+self.row(origin))//2), "green")
+        if self.row(destination)==1 and self.getpiece(destination)=="♟":
+            self.promote_pawn(destination)
+        if self.row(destination)==8 and self.getpiece(destination)=="♙":
+            self.promote_pawn(destination)
+    
+    def promote_pawn(self, index):
+        aux=tk.Tk()
+        aux.title("Tic-Tac-Toe")
+        frame=tk.Frame(aux, relief="ridge", bd=5)
+        frame.pack()
+        if self.getpiece(index) == "♙":
+            list_of_possibilities= ["♕","♖","♗","♘"]
+        else:
+            list_of_possibilities= ["♛","♜","♝","♞"]
+        for i in range(4):
+            btn = tk.Button(frame, text=list_of_possibilities[i], font=("Arial", 20), command=lambda i=i: self.promote_and_close(index, list_of_possibilities[i], aux))
+            btn.grid(column=i, row=0)
+    def promote_and_close(self, index, new_piece, window):
+        self.list_of_pieces[index] = new_piece
+        window.destroy()
+
+
 
 
 
@@ -448,6 +480,7 @@ class chess:
             if self.legalmove(origin, i):
                 self.list_of_cases[i] = "yellow"
         self.updatebuttons()
+
 
     def buttonclicked(self, buttonnumber):
         self.colorcases()
