@@ -11,6 +11,8 @@ class chess:
         self.enpassantenabled = True
         self.kastlingenabled = True
         self.turnboardenabled = True
+        self.blackpieces = ["♟", "♜", "♞", "♝", "♛", "♚"]
+        self.whitepieces = ["♙", "♖", "♘", "♗", "♕", "♔"]
 
         if self.kastlingenabled:
             self.whitecastlingkingside = True
@@ -34,9 +36,10 @@ class chess:
         self.playerinfolabel.grid(column=1, columnspan=8)
         self.list_of_cases= []
         self.list_of_pieces= ["♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜"]
-        for i in range (8): self.list_of_pieces.append("♟")
+        self.list_of_pieces= [self.blackpieces[1], "♞", "♝", "♛", "♚", "♝", "♞", "♜"]
+        for i in range (8): self.list_of_pieces.append(self.blackpieces[0])
         for i in range (32): self.list_of_pieces.append("")
-        for i in range (8): self.list_of_pieces.append("♙")
+        for i in range (8): self.list_of_pieces.append(self.whitepieces[0])
         self.list_of_pieces.extend(["♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖"])
         self.list_of_colors = []
         for i in range(16): self.list_of_colors.append("black")
@@ -118,7 +121,7 @@ class chess:
     
     def movepiece(self, origin, destination, simulation=False):
         if self.enpassantenabled:
-            if self.getpiece(origin) in ["♙", "♟"] and self.getpiece(destination) == "ep":
+            if self.getpiece(origin) in [self.blackpieces[0],self.whitepieces[0]] and self.getpiece(destination) == "ep":
                 captured_pawn_index = self.getindex(self.column(destination), self.row(origin))
                 self.list_of_pieces[captured_pawn_index] = ""
                 self.updatecolor(captured_pawn_index, "green")
@@ -216,9 +219,9 @@ class chess:
 
         if origin == destination:
             return False 
-        if self.getpiece(destination) in ["♟", "♜", "♞", "♝", "♛", "♚"] and self.player=="black":
+        if self.getpiece(destination) in self.blackpieces and self.player=="black":
             return False
-        if self.getpiece(destination) in ["♙", "♖", "♘", "♗", "♕", "♔"] and self.player=="white":
+        if self.getpiece(destination) in self.whitepieces and self.player=="white":
             return False
         
         if not (origin is None or destination is None) and self.simulate_move(origin, destination):
@@ -231,7 +234,7 @@ class chess:
                 )
             ):
                 return True
-            if self.getpiece(destination) in ["♟", "♜", "♞", "♝", "♛", "♚"] and abs(self.column(destination)-self.column(origin))==1 and self.row(destination)==self.row(origin)-1:
+            if self.getpiece(destination) in self.blackpieces and abs(self.column(destination)-self.column(origin))==1 and self.row(destination)==self.row(origin)-1:
                 return True
             if self.enpassantenabled and self.getpiece(destination) == "ep" and abs(self.column(destination)-self.column(origin))==1 and self.row(destination)==self.row(origin)-1:
                 return True
@@ -243,7 +246,7 @@ class chess:
                 )
             ):
                 return True
-            if self.getpiece(destination) in ["♙", "♖", "♘", "♗", "♕", "♔"] and abs(self.column(destination)-self.column(origin))==1 and self.row(destination)==self.row(origin)+1:
+            if self.getpiece(destination) in self.whitepieces and abs(self.column(destination)-self.column(origin))==1 and self.row(destination)==self.row(origin)+1:
                 return True
             if self.enpassantenabled and self.getpiece(destination) == "ep" and abs(self.column(destination)-self.column(origin))==1 and self.row(destination)==self.row(origin)+1:
                 return True
@@ -460,9 +463,7 @@ class chess:
         if king_position is None:
             raise LookupError("The king is gone, how did you even do that?")
 
-        opponent_pieces = (["♟", "♜", "♞", "♝", "♛", "♚"]
-                           if player == "white"
-                           else ["♙", "♖", "♘", "♗", "♕", "♔"])
+        opponent_pieces = (self.blackpieces if player == "white" else self.whitepieces)
 
         for i in range(64):
             if self.getpiece(i) in opponent_pieces and self.piece_attacks_square(i, king_position):
@@ -473,7 +474,7 @@ class chess:
         if not self.ischeck(player):
             return False
         for i in range(64):
-            if self.getpiece(i) in (["♙", "♖", "♘", "♗", "♕", "♔"] if player=="white" else ["♟", "♜", "♞", "♝", "♛", "♚"]):
+            if self.getpiece(i) in (self.whitepieces if player=="white" else self.blackpieces):
                 for j in range(64):
                     if self.legalmove(i, j) and not self.simulate_move(i, j):
                         return False
@@ -496,11 +497,11 @@ class chess:
                 print("Empty button clicked.")
                 return
             
-            if self.player=="white" and piece in ["♟", "♜", "♞", "♝", "♛", "♚"]:
+            if self.player=="white" and piece in self.blackpieces:
                 print("Wrong piece clicked.")
                 return
             
-            if self.player=="black" and piece in ["♙", "♖", "♘", "♗", "♕", "♔"]:
+            if self.player=="black" and piece in self.whitepieces:
                 print("Wrong piece clicked.")
                 return
 
@@ -510,11 +511,11 @@ class chess:
         elif self.previouspiece == buttonnumber:
             self.previouspiece = None
 
-        elif self.getpiece(buttonnumber) in ["♟", "♜", "♞", "♝", "♛", "♚"] and self.player=="black": #select another piece
+        elif self.getpiece(buttonnumber) in self.blackpieces and self.player=="black": #select another piece
             self.previouspiece = buttonnumber
             self.highlightlegalmoves(buttonnumber)
 
-        elif self.getpiece(buttonnumber) in ["♙", "♖", "♘", "♗", "♕", "♔"] and self.player=="white":
+        elif self.getpiece(buttonnumber) in self.whitepieces and self.player=="white":
             self.previouspiece = buttonnumber
             self.highlightlegalmoves(buttonnumber)
 
