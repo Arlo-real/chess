@@ -18,8 +18,8 @@ class chess:
 
         self.enpassantenabled = True
         self.kastlingenabled = True
-        self.turnboardenabled = True
-        self.blackpieces = ["🨩", "🨦", "🨨", "🨧", "🨥", "🨤"]
+        self.turnboardenabled = False
+        #self.blackpieces = ["🨩", "🨦", "🨨", "🨧", "🨥", "🨤"]
 
         if self.kastlingenabled:
             self.whitecastlingkingside = True
@@ -71,7 +71,7 @@ class chess:
         for i in range (8):
             for j in range (8):
                 if (i+j)%2==0: self.list_of_cases.append("#b9a134")
-                else: self.list_of_cases.append("#422900")
+                else: self.list_of_cases.append("#74521C")
         self.updatebuttons()
 
         self.main.mainloop()
@@ -79,7 +79,7 @@ class chess:
     def colorcases(self):
         for i in range (64):
             if (i%8 + floor(i/8))%2==0: self.list_of_cases[i] = "#b9a134"
-            else: self.list_of_cases[i] = "#422900"
+            else: self.list_of_cases[i] = "#74521C"
         self.updatebuttons()
 
     def updatebuttons(self):
