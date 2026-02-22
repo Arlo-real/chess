@@ -158,10 +158,10 @@ class chess:
         self.list_of_pieces[destination] = self.list_of_pieces[origin]
         self.list_of_pieces[origin] = ""
 
-        # Handle rook movement for castling
+        # Handle rook movement for castling                         kings
         if self.kastlingenabled and self.getpiece(destination) in [self.whitepieces[5], self.blackpieces[5]] and abs(self.column(destination) - self.column(origin)) == 2 and self.row(destination) == self.row(origin):
             # White castling
-            if self.getpiece(destination) == self.whitepieces[5]:
+            if self.getpiece(destination) == self.whitepieces[5]: #whiteking
                 # Kingside: e1 (60) -> g1 (62), rook h1 (63) -> f1 (61)
                 if destination == 62:
                     self.list_of_pieces[61] = self.list_of_pieces[63]
@@ -192,18 +192,19 @@ class chess:
                     self.updatecolor(0, "green")
                 self.blackcastlingkingside = False
                 self.blackcastlingqueenside = False
+                #                                                   pawns
         if self.enpassantenabled and self.getpiece(destination) in [self.whitepieces[0], self.blackpieces[0]] and abs(self.row(destination)-self.row(origin))==2:
             self.list_of_pieces[self.getindex(self.column(destination), (self.row(destination)+self.row(origin))//2)] = "ep"
             self.updatecolor(self.getindex(self.column(destination), (self.row(destination)+self.row(origin))//2), "green")
         if not simulation:
-            if self.row(destination)==8 and self.getpiece(destination)==self.blackpieces[0]:
+            if self.row(destination)==8 and self.getpiece(destination)==self.blackpieces[0]: #blackpawn
                 self.promote_pawn(destination)
-            if self.row(destination)==1 and self.getpiece(destination)==self.whitepieces[0]:
+            if self.row(destination)==1 and self.getpiece(destination)==self.whitepieces[0]: #whitepawn
                 self.promote_pawn(destination)
     
     def promote_pawn(self, index):
         aux=tk.Tk()
-        aux.title("Tic-Tac-Toe")
+        aux.title("Promotion")
         frame=tk.Frame(aux, relief="ridge", bd=5)
         frame.pack()
         if self.getpiece(index) == self.whitepieces[0]:
