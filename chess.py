@@ -57,7 +57,7 @@ class chess:
 
         self.buttonlist = []
         self.framelist = []
-        self.button_size = 60  # pixels
+        self.button_size = 60  # pixels on python using pyroid, 130 is good most of the time
 
         for i in range(64):
             self.btn_frame = tk.Frame(self.frame, width=self.button_size, height=self.button_size)
