@@ -23,7 +23,6 @@ class chess:
         print("Pieces replaced:", self.piecesreplaced)
         
 
-
         if self.kastlingenabled:
             self.whitecastlingkingside = True
             self.whitecastlingqueenside = True
@@ -133,8 +132,6 @@ class chess:
         return floor(case/8)+1
     def column(self, case):
         return (case%8)+1
-    def won_loose_tie(self):
-        pass
     
     def movepiece(self, origin, destination, simulation=False):
         if self.enpassantenabled:
@@ -227,9 +224,6 @@ class chess:
         self.list_of_pieces[index] = new_piece
         window.destroy()
         self.updatebuttons()
-
-
-
 
 
     def legalmove(self, origin, destination):
@@ -359,7 +353,6 @@ class chess:
                         return True
                 
                     
-                
         if self.getpiece(origin) in ["♘", "♞"] and ((abs(self.column(destination)-self.column(origin))==2 and abs(self.row(destination)-self.row(origin))==1) or (abs(self.column(destination)-self.column(origin))==1 and abs(self.row(destination)-self.row(origin))==2)):
             return True
         
@@ -552,7 +545,5 @@ class chess:
             
         print("Selected piece:", self.previouspiece)
         
-
-
 
 chess()
