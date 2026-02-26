@@ -56,7 +56,9 @@ class chess:
 
         self.buttonlist = []
         self.framelist = []
-        self.button_size = 60  # pixels on python using pyroid, 130 is good most of the time
+        self.button_size = 60  # pixels
+                                # If using pyroid, change this value to 130.
+                                # It was good for me (Pixel 8)
 
         for i in range(64):
             self.btn_frame = tk.Frame(self.frame, width=self.button_size, height=self.button_size)
@@ -464,14 +466,13 @@ class chess:
     def ischeck(self, player):
         king_position = None
         king_symbol = "♔" if player == "white" else "♚"
-
+# why are you checking this code, do you not have something better to do?
         for i in range(64):
             if self.getpiece(i) == king_symbol:
                 king_position = i
                 break
-# form here to the end of the function is AI generated
         if king_position is None:
-            raise LookupError("The king is gone, how did you even do that?")
+            raise LookupError("The king is gone, how did you even do that? This is illegal, get the chess police!")
 
         opponent_pieces = (["♟", "♜", "♞", "♝", "♛", "♚"]
                            if player == "white"
@@ -547,3 +548,4 @@ class chess:
         
 
 chess()
+# Start eveything Yepeeeeeeee
