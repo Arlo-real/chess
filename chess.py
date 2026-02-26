@@ -20,7 +20,6 @@ class chess:
             self.whitepieces == self.newwhitepieces and
             self.blackpieces == self.newblackpieces)
         
-        print("Pieces replaced:", self.piecesreplaced)
         
 
         if self.kastlingenabled:
@@ -116,7 +115,6 @@ class chess:
 
 
     def updatecolor(self, buttonnumber, newcolor):
-        print("Updating color of button", buttonnumber, "to", newcolor)
         self.list_of_colors[buttonnumber] = newcolor
 
     def getindex(self, column, row):
@@ -504,18 +502,14 @@ class chess:
     def buttonclicked(self, buttonnumber):
         self.colorcases()
         piece=self.list_of_pieces[buttonnumber]
-        print("Button", buttonnumber, "clicked. Piece on button:", piece)
         if self.previouspiece == None: #avoid selecting illegal pieces
             if piece=="":
-                print("Empty button clicked.")
                 return
             
             if self.player=="White" and piece in ["♟", "♜", "♞", "♝", "♛", "♚"]:
-                print("Wrong piece clicked.")
                 return
             
             if self.player=="Black" and piece in ["♙", "♖", "♘", "♗", "♕", "♔"]:
-                print("Wrong piece clicked.")
                 return
 
             self.previouspiece = buttonnumber
@@ -544,7 +538,6 @@ class chess:
                 self.playerinfo="Player "+("White" if self.player=="Black" else "Black")+" wins by checkmate!"
             self.updatebuttons()
             
-        print("Selected piece:", self.previouspiece)
         
 
 chess()
