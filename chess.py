@@ -39,8 +39,8 @@ class chess:
         self.frame.pack()
         font=("Arial", 30)
         self.previouspiece=None
-        self.player="white"
-        self.playerinfo="Player "+self.player+" on turn."
+        self.player="White"
+        self.playerinfo=self.player+"'s turn."
         self.playerinfolabel=tk.Label(self.frame, font=("Arial", 10))
         self.playerinfolabel.grid(column=1, columnspan=8)
         self.list_of_cases= []
@@ -50,9 +50,9 @@ class chess:
         for i in range (8): self.list_of_pieces.append("♙")
         self.list_of_pieces.extend(["♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖"])
         self.list_of_colors = []
-        for i in range(16): self.list_of_colors.append("black")
+        for i in range(16): self.list_of_colors.append("Black")
         for i in range(32): self.list_of_colors.append("green") #if I forget, it will stand out
-        for i in range(16): self.list_of_colors.append("white")
+        for i in range(16): self.list_of_colors.append("White")
 
         self.buttonlist = []
         self.framelist = []
@@ -105,7 +105,7 @@ class chess:
             self.buttonlist[i]["activebackground"] = self.list_of_cases[i]
             self.buttonlist[i]["fg"] = self.list_of_colors[i]
         if self.turnboardenabled:
-            if self.player=="white":
+            if self.player=="White":
                 for i in range(64):
                     self.framelist[i].grid(column=(i%8)+1, row=floor(i/8)+2)
             
@@ -175,13 +175,13 @@ class chess:
                 if destination == 62:
                     self.list_of_pieces[61] = self.list_of_pieces[63]
                     self.list_of_pieces[63] = ""
-                    self.updatecolor(61, "white")
+                    self.updatecolor(61, "White")
                     self.updatecolor(63, "green")
                 # Queenside: e1 (60) -> c1 (58), rook a1 (56) -> d1 (59)
                 elif destination == 58:
                     self.list_of_pieces[59] = self.list_of_pieces[56]
                     self.list_of_pieces[56] = ""
-                    self.updatecolor(59, "white")
+                    self.updatecolor(59, "White")
                     self.updatecolor(56, "green")
                 self.whitecastlingkingside = False
                 self.whitecastlingqueenside = False
@@ -191,13 +191,13 @@ class chess:
                 if destination == 6:
                     self.list_of_pieces[5] = self.list_of_pieces[7]
                     self.list_of_pieces[7] = ""
-                    self.updatecolor(5, "black")
+                    self.updatecolor(5, "Black")
                     self.updatecolor(7, "green")
                 # Queenside: e8 (4) -> c8 (2), rook a8 (0) -> d8 (3)
                 elif destination == 2:
                     self.list_of_pieces[3] = self.list_of_pieces[0]
                     self.list_of_pieces[0] = ""
-                    self.updatecolor(3, "black")
+                    self.updatecolor(3, "Black")
                     self.updatecolor(0, "green")
                 self.blackcastlingkingside = False
                 self.blackcastlingqueenside = False
@@ -232,9 +232,9 @@ class chess:
 
         if origin == destination:
             return False 
-        if self.getpiece(destination) in ["♟", "♜", "♞", "♝", "♛", "♚"] and self.player=="black":
+        if self.getpiece(destination) in ["♟", "♜", "♞", "♝", "♛", "♚"] and self.player=="Black":
             return False
-        if self.getpiece(destination) in ["♙", "♖", "♘", "♗", "♕", "♔"] and self.player=="white":
+        if self.getpiece(destination) in ["♙", "♖", "♘", "♗", "♕", "♔"] and self.player=="White":
             return False
         
         if not (origin is None or destination is None) and self.simulate_move(origin, destination):
@@ -465,7 +465,7 @@ class chess:
 
     def ischeck(self, player):
         king_position = None
-        king_symbol = "♔" if player == "white" else "♚"
+        king_symbol = "♔" if player == "White" else "♚"
 # why are you checking this code, do you not have something better to do?
         for i in range(64):
             if self.getpiece(i) == king_symbol:
@@ -475,7 +475,7 @@ class chess:
             raise LookupError("The king is gone, how did you even do that? This is illegal, get the chess police!")
 
         opponent_pieces = (["♟", "♜", "♞", "♝", "♛", "♚"]
-                           if player == "white"
+                           if player == "White"
                            else ["♙", "♖", "♘", "♗", "♕", "♔"])
 
         for i in range(64):
@@ -487,7 +487,7 @@ class chess:
         if not self.ischeck(player):
             return False
         for i in range(64):
-            if self.getpiece(i) in (["♙", "♖", "♘", "♗", "♕", "♔"] if player=="white" else ["♟", "♜", "♞", "♝", "♛", "♚"]):
+            if self.getpiece(i) in (["♙", "♖", "♘", "♗", "♕", "♔"] if player=="White" else ["♟", "♜", "♞", "♝", "♛", "♚"]):
                 for j in range(64):
                     if self.legalmove(i, j) and not self.simulate_move(i, j):
                         return False
@@ -510,11 +510,11 @@ class chess:
                 print("Empty button clicked.")
                 return
             
-            if self.player=="white" and piece in ["♟", "♜", "♞", "♝", "♛", "♚"]:
+            if self.player=="White" and piece in ["♟", "♜", "♞", "♝", "♛", "♚"]:
                 print("Wrong piece clicked.")
                 return
             
-            if self.player=="black" and piece in ["♙", "♖", "♘", "♗", "♕", "♔"]:
+            if self.player=="Black" and piece in ["♙", "♖", "♘", "♗", "♕", "♔"]:
                 print("Wrong piece clicked.")
                 return
 
@@ -524,11 +524,11 @@ class chess:
         elif self.previouspiece == buttonnumber:
             self.previouspiece = None
 
-        elif self.getpiece(buttonnumber) in ["♟", "♜", "♞", "♝", "♛", "♚"] and self.player=="black": #select another piece
+        elif self.getpiece(buttonnumber) in ["♟", "♜", "♞", "♝", "♛", "♚"] and self.player=="Black": #select another piece
             self.previouspiece = buttonnumber
             self.highlightlegalmoves(buttonnumber)
 
-        elif self.getpiece(buttonnumber) in ["♙", "♖", "♘", "♗", "♕", "♔"] and self.player=="white":
+        elif self.getpiece(buttonnumber) in ["♙", "♖", "♘", "♗", "♕", "♔"] and self.player=="White":
             self.previouspiece = buttonnumber
             self.highlightlegalmoves(buttonnumber)
 
@@ -537,11 +537,11 @@ class chess:
             self.updatecolor(buttonnumber, self.player)
             self.updatecolor(self.previouspiece, "green")
             self.previouspiece = None
-            if self.player=="white": self.player="black"
-            elif self.player=="black": self.player="white"
-            self.playerinfo="Player "+self.player+" on turn."
+            if self.player=="White": self.player="Black"
+            elif self.player=="Black": self.player="White"
+            self.playerinfo=self.player+"'s turn."
             if self.ischeckmate(self.player):
-                self.playerinfo="Player "+("white" if self.player=="black" else "black")+" wins by checkmate!"
+                self.playerinfo="Player "+("White" if self.player=="Black" else "Black")+" wins by checkmate!"
             self.updatebuttons()
             
         print("Selected piece:", self.previouspiece)
